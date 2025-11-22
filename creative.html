@@ -390,46 +390,51 @@ body {
 <div id="qrPopup" class="popup">
     <div class="popup-box">
         <h2>Scan Attendance</h2>
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=EventAttendance" />
+        <img src="file:///C:/Users/suhas/Downloads/scanner.png" />
         <button onclick="closeQR()">Close</button>
     </div>
 </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    let currentEventCard=null;
-    let upcomingContainer=document.getElementById("upcomingContainer");
+    let currentEventCard = null;
+    let upcomingContainer = document.getElementById("upcomingContainer");
 
     // PARTICLES
-    const particlesContainer=document.getElementById("particles");
-    const colors=["#ffffff50","#ffffff80","#fffa8070","#ffd70070","#00ffff70"];
-    for(let i=0;i<30;i++){
-        let p=document.createElement("div");
+    const particlesContainer = document.getElementById("particles");
+    const colors = ["#ffffff50","#ffffff80","#fffa8070","#ffd70070","#00ffff70"];
+    for (let i = 0; i < 30; i++) {
+        let p = document.createElement("div");
         p.classList.add("particle");
-        let size=Math.random()*15+5;
-        p.style.width=size+"px";
-        p.style.height=size+"px";
-        p.style.background=colors[Math.floor(Math.random()*colors.length)];
-        p.style.left=Math.random()*100+"vw";
-        p.style.animationDuration=(10+Math.random()*15)+"s";
-        p.style.animationDelay=Math.random()*10+"s";
+        let size = Math.random() * 15 + 5;
+        p.style.width = size + "px";
+        p.style.height = size + "px";
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.animationDuration = (10 + Math.random() * 15) + "s";
+        p.style.animationDelay = Math.random() * 10 + "s";
         particlesContainer.appendChild(p);
     }
 
     // POPUPS
-    scanBtn.onclick=()=>qrPopup.style.display="flex";
-    window.closeQR=()=>qrPopup.style.display="none";
-    window.openPopup=()=>popup.style.display="flex";
-    window.closePopup=()=>popup.style.display="none";
-    window.closeParticipantPopup=()=>participantPopup.style.display="none";
+    scanBtn.onclick = () => qrPopup.style.display = "flex";
+    window.closeQR = () => qrPopup.style.display = "none";
+    window.openPopup = () => popup.style.display = "flex";
+    window.closePopup = () => popup.style.display = "none";
+    window.closeParticipantPopup = () => participantPopup.style.display = "none";
 
     // SAVE EVENT
-    window.saveEvent=()=>{
-        let name=eventName.value, date=eventDate.value, time=eventTime.value,
-            venue=eventVenue.value, tag=eventTag.value, cap=Number(eventCapacity.value);
-        if(!name||!date||!time||!venue||!cap){alert("Fill all fields");return;}
+    window.saveEvent = () => {
+        let name = eventName.value, date = eventDate.value, time = eventTime.value,
+            venue = eventVenue.value, tag = eventTag.value, cap = Number(eventCapacity.value);
 
-        let card=`<div class="event-card" data-count="0" data-cap="${cap}">
+        if (!name || !date || !time || !venue || !cap) {
+            alert("Fill all fields");
+            return;
+        }
+
+        let card = `
+        <div class="event-card" data-count="0" data-cap="${cap}">
             <div class="card-header">
                 <h2 class="event-title">${name}</h2>
                 <span class="tag ${tag}">${tag.charAt(0).toUpperCase()+tag.slice(1)}</span>
@@ -450,83 +455,142 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="icons"><span onclick="deleteEvent(this)">🗑️</span></div>
             </div>
         </div>`;
-        eventContainer.insertAdjacentHTML("beforeend",card);
+        
+        eventContainer.insertAdjacentHTML("beforeend", card);
 
-        let upcomingCard=document.createElement("div");
+        let upcomingCard = document.createElement("div");
         upcomingCard.classList.add("upcoming-card");
-        upcomingCard.innerHTML=`<span><b>${name}</b> - ${date}</span><button onclick="markDone(this)">Done</button>`;
+        upcomingCard.innerHTML = `<span><b>${name}</b> - ${date}</span><button onclick="markDone(this)">Done</button>`;
         upcomingContainer.appendChild(upcomingCard);
 
-        closePopup(); updateAnalytics();
+        closePopup();
+        updateAnalytics();
     };
 
-    window.deleteEvent=(icon)=>{icon.closest(".event-card").remove();updateAnalytics();};
+    window.deleteEvent = (icon) => {
+        icon.closest(".event-card").remove();
+        updateAnalytics();
+    };
 
-    // PARTICIPANT
-    document.addEventListener("click",(e)=>{
-        if(e.target.classList.contains("participants-btn")){
-            currentEventCard=e.target.closest(".event-card"); participantPopup.style.display="flex";
+    // PARTICIPANT POPUP
+    document.addEventListener("click", (e) => {
+        if (e.target.classList.contains("participants-btn")) {
+            currentEventCard = e.target.closest(".event-card");
+            participantPopup.style.display = "flex";
         }
     });
 
-    saveParticipantBtn.onclick=()=>{
-        let name=pName.value,email=pEmail.value,mob=pMobile.value,usn=pUSN.value;
-        if(!name||!email||!mob||!usn){alert("Fill all fields!"); return;}
-        let count=Number(currentEventCard.dataset.count)+1;
-        let cap=Number(currentEventCard.dataset.cap);
-        if(count>cap){alert("Capacity full!");return;}
-        currentEventCard.dataset.count=count;
-        currentEventCard.querySelector(".count").innerText=`${count} / ${cap}`;
-        currentEventCard.querySelector(".fill").style.width=(count/cap*100)+"%";
-        alert("Participant Added!"); closeParticipantPopup();
-        pName.value=pEmail.value=pMobile.value=pUSN.value="";
+    // ⭐⭐⭐ FIXED FINAL BACKEND + UI REGISTRATION ⭐⭐⭐
+    saveParticipantBtn.onclick = async () => {
+        let name = pName.value;
+        let email = pEmail.value;
+        let mobile = pMobile.value;
+        let usn = pUSN.value;
+
+        if (!name || !email || !mobile || !usn) {
+            alert("Please fill all fields");
+            return;
+        }
+
+        // UI UPDATE
+        let count = Number(currentEventCard.dataset.count) + 1;
+        let cap = Number(currentEventCard.dataset.cap);
+
+        if (count > cap) {
+            alert("Capacity full!");
+            return;
+        }
+
+        currentEventCard.dataset.count = count;
+        currentEventCard.querySelector(".count").innerText = `${count} / ${cap}`;
+        currentEventCard.querySelector(".fill").style.width = (count / cap * 100) + "%";
+
+        // BACKEND SAVE
+        try {
+            let res = await fetch("http://localhost:3000/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email, mobile, usn })
+            });
+
+            let data = await res.json();
+            alert(data.message);
+        } catch (err) {
+            alert("Backend error. Is Node.js running?");
+        }
+
+        // CLEAR FIELDS
+        pName.value = pEmail.value = pMobile.value = pUSN.value = "";
+        closeParticipantPopup();
         updateAnalytics();
     };
 
     // UPCOMING
-    window.markDone=(btn)=>{let card=btn.closest(".upcoming-card"); card.classList.add("done"); btn.disabled=true; btn.innerText="Completed";};
-    window.addUpcoming=()=>{
-        let name=document.getElementById("newUpcomingName").value;
-        let date=document.getElementById("newUpcomingDate").value;
-        if(!name||!date){alert("Fill both fields!"); return;}
-        let card=document.createElement("div");
-        card.classList.add("upcoming-card");
-        card.innerHTML=`<span><b>${name}</b> - ${date}</span><button onclick="markDone(this)">Done</button>`;
-        upcomingContainer.appendChild(card);
-        document.getElementById("newUpcomingName").value=""; document.getElementById("newUpcomingDate").value="";
+    window.markDone = (btn) => {
+        let card = btn.closest(".upcoming-card");
+        card.classList.add("done");
+        btn.disabled = true;
+        btn.innerText = "Completed";
     };
 
-    // TABS
-    tabEvents.onclick=()=>{
-        eventContainer.style.display="flex"; analyticsSection.style.display="none"; upcomingSection.style.display="none";
-        tabEvents.classList.add("active"); tabAnalytics.classList.remove("active"); tabUpcoming.classList.remove("active");
+    window.addUpcoming = () => {
+        let name = newUpcomingName.value;
+        let date = newUpcomingDate.value;
+        if (!name || !date) { alert("Fill both fields!"); return; }
+
+        let card = document.createElement("div");
+        card.classList.add("upcoming-card");
+        card.innerHTML = `<span><b>${name}</b> - ${date}</span><button onclick="markDone(this)">Done</button>`;
+        upcomingContainer.appendChild(card);
+
+        newUpcomingName.value = "";
+        newUpcomingDate.value = "";
     };
-    tabAnalytics.onclick=()=>{
-        eventContainer.style.display="none"; analyticsSection.style.display="block"; upcomingSection.style.display="none";
-        tabAnalytics.classList.add("active"); tabEvents.classList.remove("active"); tabUpcoming.classList.remove("active");
+
+    // TABS SWITCH
+    tabEvents.onclick = () => {
+        eventContainer.style.display = "flex";
+        analyticsSection.style.display = "none";
+        upcomingSection.style.display = "none";
+    };
+
+    tabAnalytics.onclick = () => {
+        eventContainer.style.display = "none";
+        analyticsSection.style.display = "block";
+        upcomingSection.style.display = "none";
         updateAnalytics();
     };
-    tabUpcoming.onclick=()=>{
-        eventContainer.style.display="none"; analyticsSection.style.display="none"; upcomingSection.style.display="block";
-        tabUpcoming.classList.add("active"); tabEvents.classList.remove("active"); tabAnalytics.classList.remove("active");
+
+    tabUpcoming.onclick = () => {
+        eventContainer.style.display = "none";
+        analyticsSection.style.display = "none";
+        upcomingSection.style.display = "block";
     };
 
     // ANALYTICS
-    function updateAnalytics(){
-        let events=document.querySelectorAll(".event-card");
-        totalEventsCount.innerText=events.length;
-        let totalParticipants=0;
-        events.forEach(e=>totalParticipants+=Number(e.dataset.count));
-        totalParticipantsCount.innerText=totalParticipants;
-        if(events.length===0){topEvent.innerText="-"; return;}
-        let top=[...events].sort((a,b)=>Number(b.dataset.count)-Number(a.dataset.count))[0];
-        let topName=top.querySelector(".event-title").innerText;
-        let topCount=top.dataset.count;
-        topEvent.innerText=`${topName} (${topCount} registrations)`;
-    }
+    function updateAnalytics() {
+        let events = document.querySelectorAll(".event-card");
+        totalEventsCount.innerText = events.length;
 
+        let totalParticipants = 0;
+        events.forEach(e => totalParticipants += Number(e.dataset.count));
+
+        totalParticipantsCount.innerText = totalParticipants;
+
+        if (events.length === 0) {
+            topEvent.innerText = "-";
+            return;
+        }
+
+        let top = [...events].sort((a, b) => Number(b.dataset.count) - Number(a.dataset.count))[0];
+        let topName = top.querySelector(".event-title").innerText;
+        let topCount = top.dataset.count;
+
+        topEvent.innerText = `${topName} (${topCount} registrations)`;
+    }
 });
 </script>
+
 
 </body>
 </html>

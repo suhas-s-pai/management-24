@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neon Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Press Start 2P', cursive; }
+
+    body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(270deg, #FFD700, #1E90FF, #FF69B4);
+        background-size: 600% 600%;
+        animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .login-container {
+        background: rgba(0,0,0,0.85);
+        padding: 50px 40px;
+        border-radius: 25px;
+        box-shadow: 0 0 50px rgba(255,255,255,0.3);
+        text-align: center;
+        width: 370px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        animation: fadeIn 1.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+        0% { opacity: 0; transform: scale(0.8); }
+        100% { opacity: 1; transform: scale(1); }
+    }
+
+    h2 {
+        margin-bottom: 30px;
+        font-size: 28px;
+        color: #FFFF00;
+        text-shadow: 0 0 5px #FFFF00, 0 0 15px #FF69B4, 0 0 25px #1E90FF;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 15px 20px;
+        margin: 15px 0;
+        border-radius: 50px;
+        border: 2px solid rgba(255,255,255,0.3);
+        outline: none;
+        font-size: 14px;
+        background: rgba(255,255,255,0.1);
+        color: white;
+        transition: 0.3s;
+        text-shadow: 0 0 2px #000;
+    }
+
+    .input-field:focus {
+        border-color: #FFFF00;
+        box-shadow: 0 0 20px #FFFF00;
+        background: rgba(255,255,255,0.2);
+    }
+
+    .login-button {
+        margin-top: 20px;
+        padding: 15px;
+        width: 100%;
+        border: none;
+        border-radius: 50px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #fff;
+        background: linear-gradient(45deg, #FFD700, #1E90FF, #FF69B4);
+        background-size: 200% 200%;
+        animation: buttonAnim 4s linear infinite;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        transition: transform 0.3s, box-shadow 0.3s;
+        text-shadow: 0 0 5px #fff;
+    }
+
+    @keyframes buttonAnim {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .login-button:hover {
+        transform: scale(1.08);
+        box-shadow: 0 0 50px rgba(255,255,255,0.9);
+    }
+
+    .error-message {
+        margin-top: 15px;
+        color: #FF4500;
+        display: none;
+        font-weight: bold;
+        text-shadow: 0 0 5px #FF4500;
+    }
+</style>
+</head>
+<body>
+
+<div class="login-container">
+    <h2>LOGIN</h2>
+    <input type="email" id="email" class="input-field" placeholder="Gmail" required>
+    <input type="password" id="password" class="input-field" placeholder="Password" required>
+    <a href="creative.html" class="login-button">VERIFY</a>
+    <div class="error-message" id="error-message">Please enter email and password!</div>
+</div>
+
+<script>
+    const verifyButton = document.querySelector('.login-button');
+    verifyButton.addEventListener('click', function(event){
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        if(email === "" || password === "") {
+            event.preventDefault();
+            document.getElementById('error-message').style.display = "block";
+        } else {
+            document.getElementById('error-message').style.display = "none";
+        }
+    });
+</script>
+
+</body>
+</html>
