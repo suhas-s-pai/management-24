@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f6f7fb;
+            margin: 0;
+            padding: 0 30px;
+        }
+
+        /* HEADER */
+        .top-bar {
+            margin-top: 30px;
+        }
+
+        .top-bar h1 {
+            font-size: 32px;
+            margin: 0;
+        }
+
+        .top-bar p {
+            margin-top: 5px;
+            color: #555;
+        }
+
+        .top-actions {
+            margin-top: 20px;
+        }
+
+        .top-actions button {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .scan-btn {
+            background: #fff;
+            border: 1px solid #ccc;
+        }
+
+        .create-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            margin-top: 25px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border: none;
+            background: #e5e7eb;
+            margin-right: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            background: #1f2937;
+            color: white;
+        }
+
+        /* EVENT CARDS */
+        .event-container {
+            display: flex;
+            gap: 25px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .event-card {
+            width: 350px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tag {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: white;
+        }
+
+        .technical { background: #6366f1; }
+        .sports { background: #ef4444; }
+
+        /* PROGRESS BAR */
+        .progress-box {
+            margin-top: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ddd;
+            border-radius: 4px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 8px;
+            background: #facc15;
+        }
+
+        .fill.red { background: #ef4444; }
+        .fill.blue { background: #3b82f6; }
+
+        /* FOOTER */
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .participants-btn {
+            background: #f9fafb;
+            border: 1px solid #ddd;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .icons span {
+            margin-left: 12px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="top-bar">
+        <h1>Event Management</h1>
+        <p>Create and manage campus events</p>
+
+        <div class="top-actions">
+            <button class="scan-btn">📷 Scan Attendance</button>
+            <button class="create-btn">+ Create Event</button>
+        </div>
+    </header>
+
+    <div class="tabs">
+        <button class="tab active">Events</button>
+        <button class="tab">📊 Analytics</button>
+    </div>
+
+    <section class="event-container">
+
+        <!-- EVENT 1 -->
+        <div class="event-card">
+            <div class="card-header">
+                <h2>Tech Hackathon 2024</h2>
+                <span class="tag technical">Technical</span>
+            </div>
+
+            <p><b>Date:</b> Dec 15, 2024</p>
+            <p><b>Time:</b> 09:00 AM</p>
+            <p><b>Venue:</b> Computer Science Building, Lab 301</p>
+
+            <div class="progress-box">
+                <span>Registrations</span>
+                <div class="progress-bar">
+                    <div class="fill" style="width: 78%;"></div>
+                </div>
+                <span class="count">78 / 100</span>
+            </div>
+
+            <div class="card-footer">
+                <button class="participants-btn" onclick="window.location.href='party1.html'">👤 Participants</button>
+
+                <div class="icons">
+                    <span>✏️</span>
+                    <span>🗑️</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- EVENT 2 -->
+        <div class="event-card">
+            <div class="card-header">
+                <h2>Inter-College Basketball Tournament</h2>
+                <span class="tag sports">Sports</span>
+            </div>
+
+            <p><b>Date:</b> Dec 18, 2024</p>
+            <p><b>Time:</b> 02:00 PM</p>
+            <p><b>Venue:</b> Sports Complex Arena</p>
+
+            <div class="progress-box">
+                <span>Registrations</span>
+                <div class="progress-bar">
+                    <div class="fill red" style="width: 100%;"></div>
+                </div>
+                <span class="count">120 / 120</span>
+            </div>
+
+            <div class="card-footer">
+                <button class="participants-btn" onclick="window.location.href='party2.html'">👤 Participants</button>
+
+                <div class="icons">
+                    <span>✏️</span>
+                    <span>🗑️</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- EVENT 3 -->
+        <div class="event-card">
+            <div class="card-header">
+                <h2>AI & Machine Learning Workshop</h2>
+                <span class="tag technical">Technical</span>
+            </div>
+
+            <p><b>Date:</b> Dec 22, 2024</p>
+            <p><b>Time:</b> 10:00 AM</p>
+            <p><b>Venue:</b> Engineering Building, Hall A</p>
+
+            <div class="progress-box">
+                <span>Registrations</span>
+                <div class="progress-bar">
+                    <div class="fill blue" style="width: 56%;"></div>
+                </div>
+                <span class="count">45 / 80</span>
+            </div>
+
+            <div class="card-footer">
+                <button class="participants-btn" onclick="window.location.href='party3.html'">👤 Participants</button>
+
+                <div class="icons">
+                    <span>✏️</span>
+                    <span>🗑️</span>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- POPUP -->
+    <div id="eventPopup" style="
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+    ">
+        <div style="
+            background: white;
+            padding: 25px;
+            width: 350px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        ">
+            <h2>Create Event</h2>
+
+            <label>Event Name</label>
+            <input id="eventName" style="width:100%; padding:8px; margin-bottom:10px;">
+
+            <label>Date</label>
+            <input id="eventDate" type="date" style="width:100%; padding:8px; margin-bottom:10px;">
+
+            <label>Time</label>
+            <input id="eventTime" type="time" style="width:100%; padding:8px; margin-bottom:10px;">
+
+            <label>Venue</label>
+            <input id="eventVenue" style="width:100%; padding:8px; margin-bottom:10px;">
+
+            <label>Capacity</label>
+            <input id="eventCapacity" type="number" style="width:100%; padding:8px; margin-bottom:15px;">
+
+            <button id="saveEventBtn" style="
+                background:#2563eb; 
+                color:white; 
+                padding:10px; 
+                width:100%; 
+                border:none; 
+                border-radius:8px; 
+                cursor:pointer;
+            ">Save Event</button>
+
+            <button onclick="closePopup()" style="
+                margin-top:10px; 
+                width:100%; 
+                padding:10px; 
+                border:none; 
+                background:#ddd; 
+                border-radius:8px;
+                cursor:pointer;
+            ">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // OPEN POPUP
+        document.querySelector(".create-btn").addEventListener("click", () => {
+            document.getElementById("eventPopup").style.display = "flex";
+        });
+
+        // CLOSE POPUP
+        function closePopup() {
+            document.getElementById("eventPopup").style.display = "none";
+        }
+
+        // SAVE EVENT → ADD NEW CARD
+        document.getElementById("saveEventBtn").addEventListener("click", () => {
+            let name = document.getElementById("eventName").value;
+            let date = document.getElementById("eventDate").value;
+            let time = document.getElementById("eventTime").value;
+            let venue = document.getElementById("eventVenue").value;
+            let capacity = document.getElementById("eventCapacity").value;
+
+            if (!name || !date || !time || !venue || !capacity) {
+                alert("Please fill all fields!");
+                return;
+            }
+
+            let newCard = `
+                <div class="event-card">
+                    <div class="card-header">
+                        <h2>${name}</h2>
+                        <span class="tag technical">New</span>
+                    </div>
+
+                    <p><b>Date:</b> ${date}</p>
+                    <p><b>Time:</b> ${time}</p>
+                    <p><b>Venue:</b> ${venue}</p>
+
+                    <div class="progress-box">
+                        <span>Registrations</span>
+                        <div class="progress-bar">
+                            <div class="fill" style="width: 0%;"></div>
+                        </div>
+                        <span class="count">0 / ${capacity}</span>
+                    </div>
+
+                    <div class="card-footer">
+                        <button class="participants-btn">👤 Participants</button>
+                        <div class="icons">
+                            <span>✏️</span>
+                            <span>🗑️</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.querySelector(".event-container").innerHTML += newCard;
+
+            closePopup();
+
+            document.getElementById("eventName").value = "";
+            document.getElementById("eventDate").value = "";
+            document.getElementById("eventTime").value = "";
+            document.getElementById("eventVenue").value = "";
+            document.getElementById("eventCapacity").value = "";
+        });
+    </script>
+
+</body>
+</html>

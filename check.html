@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Management</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0 30px;
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+    background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a18cd1, #fbc2eb);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* PARTICLES */
+#particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.6; }
+    100% { transform: translateY(-20vh) translateX(50px) rotate(360deg); opacity: 0; }
+}
+
+/* HEADER */
+.top-bar {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;   /* Stack title and buttons vertically */
+    align-items: center;      /* Center everything horizontally */
+    text-align: center;       /* Center the text */
+}
+
+.top-bar h1 {
+    font-size: 32px;
+    margin: 0;
+}
+
+.top-bar p {
+    margin-top: 5px;
+    color: #555;
+}
+
+/* Center top action buttons */
+.top-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;  /* Center horizontally */
+    gap: 15px;                /* Space between buttons */
+}
+
+.top-actions button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.scan-btn {
+    background: #fff;
+    border: 1px solid #ccc;
+}
+
+.create-btn {
+    background: #2563eb;
+    color: white;
+}
+
+
+/* TABS */
+.tabs {
+    display: flex;
+    justify-content: center;   /* Center the tabs horizontally */
+    margin-top: 25px;
+    gap: 15px;     
+}
+
+.tab {
+    padding: 10px 20px;
+    border: none;
+    background: #e5e7eb;
+    margin-right: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.tab.active {
+    background: #1f2937;
+    color: white;
+}
+
+/* EVENT CARDS */
+.event-container {
+    display: flex;
+    gap: 25px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+.event-card {
+    width: 350px;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tag {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: white;
+}
+
+.technical { background: #6366f1; }
+.sports { background: #ef4444; }
+.cultural { background: #eab308; }
+.management { background: #0ea5e9; }
+.arts { background: #a855f7; }
+.gaming { background: #22c55e; }
+.music { background: #f97316; }
+
+/* PROGRESS BAR */
+.progress-box { margin-top: 15px; }
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #ddd;
+    border-radius: 4px;
+    margin: 8px 0;
+    overflow: hidden;
+}
+.fill {
+    height: 8px;
+    background: #facc15;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.participants-btn {
+    background: #f9fafb;
+    border: 1px solid #ddd;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.icons span {
+    margin-left: 12px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+/* POPUPS */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.popup-box {
+    background: white;
+    padding: 25px;
+    width: 350px;
+    border-radius: 10px;
+    position: relative;
+    z-index: 2;
+}
+
+.popup-box input, .popup-box select {
+    width: 100%;
+    margin: 8px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.popup-box button {
+    padding: 10px 18px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.close-btn {
+    background: #ccc;
+}
+
+.save-btn {
+    background: #2563eb;
+    color: white;
+    float: right;
+}
+
+/* QR POPUP */
+#qrPopup .popup-box {
+    text-align: center;
+}
+#qrPopup img {
+    width: 100%;
+    max-width: 220px;
+    margin-top: 10px;
+}
+#qrPopup button {
+    width: 100%;
+    margin-top: 15px;
+    background: red;
+    color: white;
+}
+
+/* UPCOMING EVENTS */
+#upcomingSection {
+    display: none;
+    margin-top: 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.upcoming-card {
+    background: white;
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.upcoming-card button {
+    background: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.upcoming-card.done button {
+    background: #ef4444;
+    cursor: not-allowed;
+}
+
+/* Input container for new upcoming events */
+#upcomingInputContainer {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#upcomingInputContainer input, #upcomingInputContainer button {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+#upcomingInputContainer button {
+    border: none;
+    background: #2563eb;
+    color: white;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<div id="particles"></div>
+
+<header class="top-bar">
+    <h1>Event Management</h1>
+    <p>Create and manage campus events</p>
+    <div class="top-actions">
+        <button class="scan-btn" id="scanBtn">📷 Scan Attendance</button>
+        <button class="create-btn" onclick="openPopup()">+ Create Event</button>
+    </div>
+</header>
+
+<div class="tabs">
+    <button id="tabEvents" class="tab active">Events</button>
+    <button id="tabAnalytics" class="tab">📊 Analytics</button>
+    <button id="tabUpcoming" class="tab">📅 Upcoming Events</button>
+</div>
+
+<section class="event-container" id="eventContainer"></section>
+
+<section id="analyticsSection" style="display:none; margin-top:30px;">
+    <div style="background:white;padding:20px;border-radius:12px;width:400px;box-shadow:0 4px 15px rgba(0,0,0,0.1);">
+        <h2>📊 Analytics Dashboard</h2>
+        <p>Total Events: <b id="totalEventsCount">0</b></p>
+        <p>Total Participants: <b id="totalParticipantsCount">0</b></p>
+        <p>Most Popular Event: <b id="topEvent">-</b></p>
+    </div>
+</section>
+
+<section id="upcomingSection">
+    <div id="upcomingInputContainer">
+        <input type="text" id="newUpcomingName" placeholder="Upcoming Event Name">
+        <input type="date" id="newUpcomingDate">
+        <button onclick="addUpcoming()">Add</button>
+    </div>
+    <div id="upcomingContainer"></div>
+</section>
+
+<!-- EVENT POPUP -->
+<div class="popup" id="popup">
+    <div class="popup-box">
+        <h2>Create New Event</h2>
+        <input type="text" id="eventName" placeholder="Event Name">
+        <input type="date" id="eventDate">
+        <input type="time" id="eventTime">
+        <input type="text" id="eventVenue" placeholder="Venue">
+        <input type="number" id="eventCapacity" placeholder="Capacity">
+        <select id="eventTag">
+            <option value="technical">Technical</option>
+            <option value="sports">Sports</option>
+            <option value="cultural">Cultural</option>
+            <option value="management">Management</option>
+            <option value="arts">Arts</option>
+            <option value="gaming">Gaming</option>
+            <option value="music">Music</option>
+        </select>
+        <button class="close-btn" onclick="closePopup()">Cancel</button>
+        <button class="save-btn" onclick="saveEvent()">Save</button>
+    </div>
+</div>
+
+<!-- PARTICIPANT POPUP -->
+<div id="participantPopup" class="popup">
+    <div class="popup-box">
+        <h2>Add Participant</h2>
+        <input id="pName" placeholder="Name">
+        <input id="pEmail" type="email" placeholder="Email">
+        <input id="pMobile" type="number" placeholder="Mobile">
+        <input id="pUSN" placeholder="USN">
+        <button id="saveParticipantBtn" style="background:#16a34a;color:white;width:100%;">Save Participant</button>
+        <button onclick="closeParticipantPopup()" style="width:100%;background:#ddd;margin-top:10px;">Cancel</button>
+    </div>
+</div>
+
+<!-- QR POPUP -->
+<div id="qrPopup" class="popup">
+    <div class="popup-box">
+        <h2>Scan Attendance</h2>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=EventAttendance" />
+        <button onclick="closeQR()">Close</button>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    let currentEventCard=null;
+    let upcomingContainer=document.getElementById("upcomingContainer");
+
+    // PARTICLES
+    const particlesContainer=document.getElementById("particles");
+    const colors=["#ffffff50","#ffffff80","#fffa8070","#ffd70070","#00ffff70"];
+    for(let i=0;i<30;i++){
+        let p=document.createElement("div");
+        p.classList.add("particle");
+        let size=Math.random()*15+5;
+        p.style.width=size+"px";
+        p.style.height=size+"px";
+        p.style.background=colors[Math.floor(Math.random()*colors.length)];
+        p.style.left=Math.random()*100+"vw";
+        p.style.animationDuration=(10+Math.random()*15)+"s";
+        p.style.animationDelay=Math.random()*10+"s";
+        particlesContainer.appendChild(p);
+    }
+
+    // POPUPS
+    scanBtn.onclick=()=>qrPopup.style.display="flex";
+    window.closeQR=()=>qrPopup.style.display="none";
+    window.openPopup=()=>popup.style.display="flex";
+    window.closePopup=()=>popup.style.display="none";
+    window.closeParticipantPopup=()=>participantPopup.style.display="none";
+
+    // SAVE EVENT
+    window.saveEvent=()=>{
+        let name=eventName.value, date=eventDate.value, time=eventTime.value,
+            venue=eventVenue.value, tag=eventTag.value, cap=Number(eventCapacity.value);
+        if(!name||!date||!time||!venue||!cap){alert("Fill all fields");return;}
+
+        let card=`<div class="event-card" data-count="0" data-cap="${cap}">
+            <div class="card-header">
+                <h2 class="event-title">${name}</h2>
+                <span class="tag ${tag}">${tag.charAt(0).toUpperCase()+tag.slice(1)}</span>
+            </div>
+            <p><b>Date:</b> ${date}</p>
+            <p><b>Time:</b> ${time}</p>
+            <p><b>Venue:</b> ${venue}</p>
+            <p><b>Capacity:</b> ${cap}</p>
+            <div class="progress-box">
+                <span>Registrations</span>
+                <div class="progress-bar">
+                    <div class="fill" style="width:0%;"></div>
+                </div>
+                <span class="count">0 / ${cap}</span>
+            </div>
+            <div class="card-footer">
+                <button class="participants-btn">👤 Participants</button>
+                <div class="icons"><span onclick="deleteEvent(this)">🗑️</span></div>
+            </div>
+        </div>`;
+        eventContainer.insertAdjacentHTML("beforeend",card);
+
+        let upcomingCard=document.createElement("div");
+        upcomingCard.classList.add("upcoming-card");
+        upcomingCard.innerHTML=`<span><b>${name}</b> - ${date}</span><button onclick="markDone(this)">Done</button>`;
+        upcomingContainer.appendChild(upcomingCard);
+
+        closePopup(); updateAnalytics();
+    };
+
+    window.deleteEvent=(icon)=>{icon.closest(".event-card").remove();updateAnalytics();};
+
+    // PARTICIPANT
+    document.addEventListener("click",(e)=>{
+        if(e.target.classList.contains("participants-btn")){
+            currentEventCard=e.target.closest(".event-card"); participantPopup.style.display="flex";
+        }
+    });
+
+    saveParticipantBtn.onclick=()=>{
+        let name=pName.value,email=pEmail.value,mob=pMobile.value,usn=pUSN.value;
+        if(!name||!email||!mob||!usn){alert("Fill all fields!"); return;}
+        let count=Number(currentEventCard.dataset.count)+1;
+        let cap=Number(currentEventCard.dataset.cap);
+        if(count>cap){alert("Capacity full!");return;}
+        currentEventCard.dataset.count=count;
+        currentEventCard.querySelector(".count").innerText=`${count} / ${cap}`;
+        currentEventCard.querySelector(".fill").style.width=(count/cap*100)+"%";
+        alert("Participant Added!"); closeParticipantPopup();
+        pName.value=pEmail.value=pMobile.value=pUSN.value="";
+        updateAnalytics();
+    };
+
+    // UPCOMING
+    window.markDone=(btn)=>{let card=btn.closest(".upcoming-card"); card.classList.add("done"); btn.disabled=true; btn.innerText="Completed";};
+    window.addUpcoming=()=>{
+        let name=document.getElementById("newUpcomingName").value;
+        let date=document.getElementById("newUpcomingDate").value;
+        if(!name||!date){alert("Fill both fields!"); return;}
+        let card=document.createElement("div");
+        card.classList.add("upcoming-card");
+        card.innerHTML=`<span><b>${name}</b> - ${date}</span><button onclick="markDone(this)">Done</button>`;
+        upcomingContainer.appendChild(card);
+        document.getElementById("newUpcomingName").value=""; document.getElementById("newUpcomingDate").value="";
+    };
+
+    // TABS
+    tabEvents.onclick=()=>{
+        eventContainer.style.display="flex"; analyticsSection.style.display="none"; upcomingSection.style.display="none";
+        tabEvents.classList.add("active"); tabAnalytics.classList.remove("active"); tabUpcoming.classList.remove("active");
+    };
+    tabAnalytics.onclick=()=>{
+        eventContainer.style.display="none"; analyticsSection.style.display="block"; upcomingSection.style.display="none";
+        tabAnalytics.classList.add("active"); tabEvents.classList.remove("active"); tabUpcoming.classList.remove("active");
+        updateAnalytics();
+    };
+    tabUpcoming.onclick=()=>{
+        eventContainer.style.display="none"; analyticsSection.style.display="none"; upcomingSection.style.display="block";
+        tabUpcoming.classList.add("active"); tabEvents.classList.remove("active"); tabAnalytics.classList.remove("active");
+    };
+
+    // ANALYTICS
+    function updateAnalytics(){
+        let events=document.querySelectorAll(".event-card");
+        totalEventsCount.innerText=events.length;
+        let totalParticipants=0;
+        events.forEach(e=>totalParticipants+=Number(e.dataset.count));
+        totalParticipantsCount.innerText=totalParticipants;
+        if(events.length===0){topEvent.innerText="-"; return;}
+        let top=[...events].sort((a,b)=>Number(b.dataset.count)-Number(a.dataset.count))[0];
+        let topName=top.querySelector(".event-title").innerText;
+        let topCount=top.dataset.count;
+        topEvent.innerText=`${topName} (${topCount} registrations)`;
+    }
+
+});
+</script>
+
+</body>
+</html>
